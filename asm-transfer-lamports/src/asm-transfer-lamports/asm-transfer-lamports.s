@@ -18,27 +18,27 @@ entrypoint:
 
   # Second account
   ldxb r5, [r4 + 0]                                             # Load first byte of second account to r5.
-	jne r5, 0xff, error_duplicate_accounts                        # Exit if it's a duplicate account.
-	ldxdw r5, [r4 + 8 + 32 + 32]                                  # Load destination account lamports to r5.
-	ldxdw r6, [r4 + 8 + 32 + 32 + 8]                              # Load account data size to r6.
-	mov64 r7, r4                                                  # Copy pointer r4 into r7.
-	add64 r7, 8 + 32 + 32 + 8 + 8 + 10240 + 8                     # Load the end of second account to r7.
-	add64 r7, r6                                                  # Add account data size to r7.
-	mov64 r8, r7                                                  # Copy r7 to r8.
-	and64 r7, -8                                                  # Align to 8 bytes.
-	jeq r8, r7, 1                                                 # If already aligned, skip the next step.
-	add64 r7, 8                                                   # Otherwise, add 8 bytes.
+  jne r5, 0xff, error_duplicate_accounts                        # Exit if it's a duplicate account.
+  ldxdw r5, [r4 + 8 + 32 + 32]                                  # Load destination account lamports to r5.
+  ldxdw r6, [r4 + 8 + 32 + 32 + 8]                              # Load account data size to r6.
+  mov64 r7, r4                                                  # Copy pointer r4 into r7.
+  add64 r7, 8 + 32 + 32 + 8 + 8 + 10240 + 8                     # Load the end of second account to r7.
+  add64 r7, r6                                                  # Add account data size to r7.
+  mov64 r8, r7                                                  # Copy r7 to r8.
+  and64 r7, -8                                                  # Align to 8 bytes.
+  jeq r8, r7, 1                                                 # If already aligned, skip the next step.
+  add64 r7, 8                                                   # Otherwise, add 8 bytes.
 
   # Instruction data
   ldxdw r8, [r7 + 0]                                            # Load instruction data size to r8.
-	jne r8, 8, error_invalid_instruction_data                     # Exit if we don't have exactly 8 bytes.
-	ldxdw r8, [r7 + 8]                                            # Load instruction data to r8.
+  jne r8, 8, error_invalid_instruction_data                     # Exit if we don't have exactly 8 bytes.
+  ldxdw r8, [r7 + 8]                                            # Load instruction data to r8.
 
   # Transfer lamports
-	sub64 r2, r8                                                  # Subtract lamports from source account (r2).
-	add64 r5, r8                                                  # Add lamports to destination account (r5).
-	stxdw [r1 + 8 + 32 + 32], r2                                  # Write new lamports to source.
-	stxdw [r4 + 8 + 32 + 32], r5                                  # Write new lamports to destination.
+  sub64 r2, r8                                                  # Subtract lamports from source account (r2).
+  add64 r5, r8                                                  # Add lamports to destination account (r5).
+  stxdw [r1 + 8 + 32 + 32], r2                                  # Write new lamports to source.
+  stxdw [r4 + 8 + 32 + 32], r5                                  # Write new lamports to destination.
 
   # Log success message
   lddw r1, message                                              # Load success message to r1.

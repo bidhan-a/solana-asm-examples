@@ -39,7 +39,7 @@ entrypoint:
 
   # Transfer lamports
   sub64 r2, r4                                                  # Subtract lamports from source account (r2).
-  add64 r3, r4                                                  # Add lamports to destination account (r5).
+  add64 r3, r4                                                  # Add lamports to destination account (r3).
   stxdw [r1 + SENDER_LAMPORTS], r2                              # Write new lamports to source.
   stxdw [r1 + RECEIVER_LAMPORTS], r3                            # Write new lamports to destination.
 
